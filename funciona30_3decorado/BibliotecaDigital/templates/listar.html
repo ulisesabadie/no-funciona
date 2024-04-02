@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Películas</title>
+    <style>
+        body {
+            background-image: url('https://i0.wp.com/imgs.hipertextual.com/wp-content/uploads/2017/03/Captura-de-pantalla-2017-03-30-a-las-11.59.05.png?fit=2012%2C1006&quality=50&strip=all&ssl=1');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* Fondo semi-transparente */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra */
+            text-align: center;
+        }
+        ul {
+            list-style-type: none; /* Remueve los puntos de la lista */
+            padding: 0;
+        }
+        li {
+            background-color: rgba(0, 0, 0, 0.05); /* Fondo de cada elemento de la lista */
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            background-color: rgba(0, 123, 255, 0.1); /* Fondo ligeramente azul */
+        }
+        a:hover {
+            background-color: rgba(0, 123, 255, 0.2);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de Películas</h1>
+        <p>Lista de películas disponibles:</p>
+        <ul>
+            {% for pelicula in peliculas %}
+                <li>{{ pelicula }}</li>
+            {% endfor %}
+        </ul>
+        <a href="/">Volver al Inicio</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugar</title>
+    <style>
+        body {
+            background-image: url('https://i0.wp.com/imgs.hipertextual.com/wp-content/uploads/2017/03/Captura-de-pantalla-2017-03-30-a-las-11.59.05.png?fit=2012%2C1006&quality=50&strip=all&ssl=1');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* Fondo semi-transparente */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra */
+        }
+        h1, p {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            margin: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trivia de Películas</h1>
+        <p>Comenzarás a jugar con {{ num_intentos }} intentos.</p>
+        <p>¿Cuál película corresponde a la siguiente frase?</p>
+        <p>{{ session["frase"] }}</p>
+        
+        <form action="/mensaje" method="post">
+            {% if opciones %}
+                {% for opcion in opciones %}
+                    <input type="radio" id="{{ opcion }}" name="respuesta" value="{{ opcion }}">
+                    <label for="{{ opcion }}">{{ opcion }}</label><br>
+                {% endfor %}
+            {% endif %}
+            <button type="submit">Responder</button>
+        </form>
+        
+        <br> 
+        <a href="{{ url_for('resultados_globales') }}">Ver Resultados Globales</a>
+        <br>
+        <a href="{{ url_for('listar_peliculas') }}">Ver Listado de Películas</a>
+        <br>
+        <a href="{{ url_for('inicio') }}">Volver</a>
+    </div>
+</body>
+</html>

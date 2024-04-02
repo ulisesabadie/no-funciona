@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia de Películas</title>
+    <style>
+        body {
+            background-image: url('https://i0.wp.com/imgs.hipertextual.com/wp-content/uploads/2017/03/Captura-de-pantalla-2017-03-30-a-las-11.59.05.png?fit=2012%2C1006&quality=50&strip=all&ssl=1');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* Fondo semi-transparente */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra */
+        }
+        h1, p, label, input[type="submit"], a {
+            color: #333; /* Color del texto */
+        }
+        form {
+            margin-top: 20px;
+        }
+        a {
+            display: block;
+            margin-top: 10px;
+            color: #007bff; /* Color del enlace */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trivia de Películas</h1>
+        <p>Bienvenido a la Trivia de Películas. Ingresa el número de frases y tu nombre para comenzar el juego.</p>
+        <form action="/" method="post">
+            <label for="num_intentos">Número de frases:</label>
+            <input type="number" id="num_intentos" name="num_intentos" min="3" required>
+            <br>
+            <label for="usuario">Tu nombre:</label>
+            <input type="text" id="usuario" name="usuario" required>
+            <br>
+            <input type="submit" value="Comenzar Juego">
+        </form>
+        <a href="/listar_peliculas">Ver Listado de Películas</a>
+        <a href="{{ url_for('resultados_globales') }}">Ver Resultados Globales</a>
+    </div>
+</body>
+</html>

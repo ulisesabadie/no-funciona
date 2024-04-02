@@ -3,9 +3,14 @@ from modules.config import app
 from modules.funciones import verificar_respuesta, seleccionar_frase_y_opciones, guardar_peli_en_archivo, obtener_peliculas, encontrar_pelicula_correcta, obtener_frase_y_opciones
 import random
 from datetime import datetime
+import matplotlib.pyplot as plt
+import io
+import base64
+
+
 
 #RUTA = "./data/"
-ARCHIVO = r"C:\Users\Usuario\OneDrive\Escritorio\nay\tp_1_git\funciona30_3decorado\BibliotecaDigital\data\frases_de_peliculas.txt"
+ARCHIVO = r"C:\Users\Usuario\OneDrive\Escritorio\nay\no-funciona\funciona30_3decorado\BibliotecaDigital\data\frases_de_peliculas.txt"
 
 lista_pelis = []  # Lista auxiliar
 with open(ARCHIVO, "r", encoding="UTF-8") as archivo:
@@ -54,7 +59,7 @@ def jugar():
             session["hora_jugado"] = datetime.now().strftime("%H:%M:%S")
             session["aciertos"] = session.get("aciertos", 0)
             session["puntaje"] = f"{session['aciertos']}/{session['num_intentos']}"
-            resultados.append({"nombre": session["nombre"], "aciertos": session["aciertos"], "hora": session["hora_jugado"]})
+            resultados.append({"nombre": session["nombre"], "puntaje": session["puntaje"], "hora": session["hora_jugado"]})
             return redirect(url_for("resultado_personal"))
         
         peliculas = obtener_peliculas(lista_pelis)
@@ -120,6 +125,95 @@ def resultado_personal():
 @app.route("/resultados_globales")
 def resultados_globales():
     return render_template("resultado_global.html", resultados=resultados)
+
+@app.route("/ver_grafico")
+def ver_grafico():
+    resultados = session.get('resultados', [])
+    nombre_archivo = 'grafico_torta.png'
+    ruta_archivo = f'static/{nombre_archivo}'
+    plt.savefig(ruta_archivo)
+    
+    return render_template("ver_graficos.html", ruta_archivo=nombre_archivo)
+
+
+@app.route("/mostrar_grafica")
+def mostrar_grafica():
+
+    horas_juego = [datetime.strptime(resultado['hora'], "%H:%M:%S") for resultado in resultados]
+
+    # Obtener los aciertos y desaciertos
+    aciertos = [int(resultado['puntaje'].split('/')[0]) for resultado in resultados]
+    desaciertos = [int(resultado['puntaje'].split('/')[1]) - int(resultado['puntaje'].split('/')[0]) for resultado in resultados]
+
+    # Crear la gráfica
+    plt.figure(figsize=(10, 6))
+
+    # Curva de aciertos
+    plt.plot(horas_juego, aciertos, label='Aciertos', marker='o')
+
+    # Curva de desaciertos
+    plt.plot(horas_juego, desaciertos, label='Desaciertos', marker='x')
+
+    # Personalizar la gráfica
+    plt.title('Aciertos y desaciertos en función de la hora de juego')
+    plt.xlabel('Hora de juego')
+    plt.ylabel('Cantidad')
+    plt.legend()
+    plt.grid(True)
+
+    # Mostrar la gráfica
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+    plt.figure(figsize=(10, 6))
+    plt.plot(horas_juego, aciertos, label='Aciertos', marker='o')
+    plt.plot(horas_juego, desaciertos, label='Desaciertos', marker='x')
+    plt.title('Aciertos y desaciertos en función de la hora de juego')
+    plt.xlabel('Hora de juego')
+    plt.ylabel('Cantidad')
+    plt.legend()
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # Convertir la gráfica a una imagen base64
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    img_base64 = base64.b64encode(img.getvalue()).decode()
+    img_url = f'data:image/png;base64,{img_base64}'
+
+    # Pasar la URL de la imagen al HTML
+    return render_template("mostrar_grafica.html", img_url=img_url)
+
+@app.route("/mostrar_grafica_torta")
+def mostrar_grafica_torta():
+    horas_juego = [datetime.strptime(resultado['hora'], "%H:%M:%S") for resultado in resultados]
+
+    # Obtener los aciertos y desaciertos
+    aciertos = [int(resultado['puntaje'].split('/')[0]) for resultado in resultados]
+    desaciertos = [int(resultado['puntaje'].split('/')[1]) - int(resultado['puntaje'].split('/')[0]) for resultado in resultados]
+
+    # Crear el gráfico de torta
+    plt.figure(figsize=(6, 6))
+    total_aciertos = sum(aciertos)
+    total_desaciertos = sum(desaciertos)
+    plt.pie([total_aciertos, total_desaciertos], labels=['Aciertos', 'Desaciertos'], autopct='%1.1f%%', colors=['green', 'red'])
+    plt.title('Gráfico de Torta de Aciertos y Desaciertos')
+    plt.axis('equal')
+
+    # Convertir la gráfica a una imagen base64
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    img_base64 = base64.b64encode(img.getvalue()).decode()
+    img_url = f'data:image/png;base64,{img_base64}'
+
+    # Pasar la URL de la imagen al HTML
+    return render_template("mostrar_grafica_torta.html", img_url=img_url)
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

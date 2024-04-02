@@ -1,5 +1,6 @@
 import random
 
+import matplotlib.pyplot as plt
 
 # def cargar_peli_desde_archivo(nombre_archivo, lista_pelis):
 #     """Función que lee la información de los libros desde un archivo
@@ -78,4 +79,3 @@ def obtener_frase_y_opciones(lista_pelis, peliculas):
     random.shuffle(opciones_aleatorias)
     
     return frase_aleatoria, opciones_aleatorias, pelicula_correcta
-
